@@ -62,5 +62,6 @@
     </footer>
 
     <script src="{{ asset('build/assets/app.js') }}"></script>
+    @yield('scripts')
 </body>
 </html>

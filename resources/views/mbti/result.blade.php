@@ -161,7 +161,7 @@
 <script>
     const ctx = document.getElementById('mbtiChart').getContext('2d');
     const mbtiChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'doughnut',
         data: {
             labels: ['E', 'I', 'S', 'N', 'T', 'F', 'J', 'P'],
             datasets: [{
@@ -203,27 +203,20 @@
             responsive: true,
             plugins: {
                 legend: {
-                    display: false
+                    display: true,
+                    position: 'bottom',
                 },
                 title: {
                     display: true,
-                    text: 'Diagram Skor Dimensi MBTI',
+                    text: 'Diagram Lingkaran Skor Dimensi MBTI',
                     font: { size: 18 }
                 },
                 tooltip: {
                     enabled: true,
                     callbacks: {
                         label: function(context) {
-                            return context.dataset.label + ': ' + context.parsed.y;
+                            return context.label + ': ' + context.parsed + ' poin';
                         }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1
                     }
                 }
             }
