@@ -92,6 +92,14 @@
                 <canvas id="mbtiChart" class="w-full max-w-2xl mx-auto"></canvas>
             </div>
         </div>
+
+        <!-- Chatbot Section -->
+        <div class="container mx-auto mt-16">
+            <h2 class="text-3xl font-bold text-center text-green-600 mb-8">MBTI Chatbot</h2>
+            <div class="bg-white p-8 rounded-lg shadow-lg">
+                <mbti-chatbot></mbti-chatbot>
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->

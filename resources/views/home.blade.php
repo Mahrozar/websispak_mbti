@@ -20,4 +20,5 @@
         </div>
     </div>
 </div>
+<mbti-chatbot></mbti-chatbot>
 @endsection
