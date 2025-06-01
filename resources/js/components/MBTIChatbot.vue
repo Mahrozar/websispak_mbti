@@ -69,6 +69,8 @@
 </template>
 
 <script>
+// Hapus import natural dan lemmatizer karena tidak support browser
+// Tambahkan stemming dan lemmatization sederhana manual
 export default {
     data() {
         return {
@@ -83,14 +85,73 @@ export default {
         };
     },
     methods: {
+        // Kamus sinonim dan kata kunci
+        normalize(msg) {
+            const dictionary = {
+                mbti: ["mbti", "kepribadian", "personality"],
+                tipe: ["tipe", "type", "jenis", "karakter"],
+                karir: [
+                    "karir",
+                    "pekerjaan",
+                    "profesi",
+                    "kerja",
+                    "job",
+                    "career",
+                ],
+                tes: ["tes", "test", "ujian", "assessment"],
+                kelebihan: ["kelebihan", "kekuatan", "strength", "unggul"],
+                kelemahan: ["kelemahan", "kekurangan", "lemah", "weakness"],
+                halo: ["halo", "hai", "hello", "hi", "selamat"],
+            };
+            let result = msg;
+            Object.entries(dictionary).forEach(([main, variants]) => {
+                variants.forEach((v) => {
+                    result = result.replace(
+                        new RegExp(`\\b${v}\\b`, "gi"),
+                        main
+                    );
+                });
+            });
+            return result;
+        },
+        simpleStem(word) {
+            // Stemming manual sederhana (untuk bahasa Indonesia/Inggris)
+            return word.replace(/(ing|ed|an|kan|nya|i|s)$/i, "");
+        },
+        simpleLemmatize(word) {
+            // Lemmatization manual sederhana (untuk bahasa Inggris)
+            // Contoh: "better" -> "good", "went" -> "go" (tambahkan sesuai kebutuhan)
+            const lemmaDict = {
+                better: "good",
+                went: "go",
+                gone: "go",
+                running: "run",
+                ran: "run",
+                jobs: "job",
+                careers: "career",
+                tests: "test",
+                // tambahkan sesuai kebutuhan
+            };
+            return lemmaDict[word] || word;
+        },
         sendMessage() {
             if (!this.input.trim()) return;
             this.messages.push({ text: this.input, user: true });
             const userMsg = this.input.toLowerCase();
+            // Tokenisasi, stemming, lalu lemmatization manual
+            const stemmedMsg = userMsg
+                .split(" ")
+                .map(this.simpleStem)
+                .join(" ");
+            const lemmatizedMsg = stemmedMsg
+                .split(" ")
+                .map(this.simpleLemmatize)
+                .join(" ");
+            const normalizedMsg = this.normalize(lemmatizedMsg);
             this.input = "";
             setTimeout(() => {
                 this.messages.push({
-                    text: this.getBotReply(userMsg),
+                    text: this.getBotReply(normalizedMsg),
                     user: false,
                 });
                 this.$nextTick(() => {
@@ -100,7 +161,7 @@ export default {
             }, 600);
         },
         getBotReply(msg) {
-            // Simple rule-based responses
+            // msg sudah dalam bentuk stemmed
             if (msg.includes("mbti"))
                 return "MBTI adalah tes kepribadian yang membagi manusia menjadi 16 tipe berdasarkan 4 dimensi utama.";
             if (

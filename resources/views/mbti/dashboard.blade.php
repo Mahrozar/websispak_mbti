@@ -1,30 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body class="bg-gray-100 min-h-screen">
-    <!-- Navbar -->
-    <nav class="bg-blue-600 p-4 shadow-md">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="/" class="text-white text-lg font-bold">MBTI App</a>
-            <div class="space-x-4 flex items-center">
-                <a href="/dashboard" class="text-white hover:underline">Dashboard</a>
-                <a href="/about" class="text-white hover:underline">About</a>
-                <form method="POST" action="{{ route('logout') }}" class="inline">
-                    @csrf
-                    <button type="submit" class="text-white hover:underline">Logout</button>
-                </form>
-                <button onclick="toggleDarkMode()" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500">Toggle Dark Mode</button>
-            </div>
-        </div>
-    </nav>
+@extends('layouts.app')
 
+@section('content')
     <!-- Hero Section -->
     <section class="bg-gradient-to-r from-green-400 to-blue-500 text-white py-12">
         <div class="container mx-auto text-center">
@@ -33,6 +9,14 @@
             <a href="{{ url('/test') }}" class="bg-white text-green-600 px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-gray-100">Take the Test Now</a>
         </div>
     </section>
+
+    <!-- Logout Button -->
+    <div class="container mx-auto mt-6 flex justify-end">
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-md font-semibold shadow hover:bg-red-700 transition">Logout</button>
+        </form>
+    </div>
 
     <!-- Content -->
     <div class="container mx-auto mt-8">
@@ -101,59 +85,60 @@
             </div>
         </div>
     </div>
+@endsection
 
-    <!-- Footer -->
-    <footer class="bg-green-600 text-white text-center py-6 mt-16">
-        <p class="text-sm">&copy; 2025 MBTI App. All rights reserved.</p>
-    </footer>
-
-    <!-- Chart & Dark Mode Script -->
-    <script>
-        const ctx = document.getElementById('mbtiChart').getContext('2d');
-        const mbtiChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['INTJ', 'INFP', 'ENTP', 'ISFJ', 'ENFP'],
-                datasets: [{
-                    label: 'Number of Users',
-                    data: [12, 19, 8, 15, 10],
-                    backgroundColor: 'rgba(30, 144, 255, 0.5)',
-                    borderColor: 'rgba(30, 144, 255, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'MBTI Distribution'
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const chartEl = document.getElementById('mbtiChart');
+        if (chartEl) {
+            const ctx = chartEl.getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['INTJ', 'INFP', 'ENTP', 'ISFJ', 'ENFP'],
+                    datasets: [{
+                        label: 'Number of Users',
+                        data: [12, 19, 8, 15, 10],
+                        backgroundColor: 'rgba(30, 144, 255, 0.5)',
+                        borderColor: 'rgba(30, 144, 255, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'MBTI Distribution'
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
+    });
 
-        // Dark mode toggle logic
-        const toggleDarkMode = () => {
-            const html = document.documentElement;
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            } else {
-                html.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            }
-        };
+    // Dark mode toggle logic
+    window.toggleDarkMode = () => {
+        const html = document.documentElement;
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        } else {
+            html.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        }
+    };
 
-        // Apply saved theme on load
-        document.addEventListener('DOMContentLoaded', () => {
-            if (localStorage.getItem('theme') === 'dark') {
-                document.documentElement.classList.add('dark');
-            }
-        });
-    </script>
-</body>
-</html>
+    // Apply saved theme on load
+    document.addEventListener('DOMContentLoaded', () => {
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+    });
+</script>
+@endsection

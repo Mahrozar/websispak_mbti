@@ -19,8 +19,8 @@
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav ms-auto">
+                    <div class="collapse navbar-collapse justify-end" id="navbarNav">
+                        <ul class="navbar-nav ms-auto flex items-center">
                             @guest
                                 <li class="nav-item">
                                     <a class="nav-link text-white" href="{{ route('login') }}">Login</a>
@@ -31,17 +31,16 @@
                                     </li>
                                 @endif
                             @else
-                                <li class="nav-item dropdown">
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                        {{ Auth::user()->name }}
+                                <li class="nav-item dropdown flex items-center">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle text-white flex items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        <span class="font-bold">{{ Auth::user()->name }}</span>
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                                     </a>
-
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                             Logout
                                         </a>
-
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                             @csrf
                                         </form>
@@ -63,7 +62,7 @@
         </footer>
     </div>
 
-    <script src="{{ asset('build/assets/app.js') }}"></script>
+    @vite('resources/js/app.js')
     @yield('scripts')
 </body>
 </html>
